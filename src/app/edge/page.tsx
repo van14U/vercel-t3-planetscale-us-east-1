@@ -2,10 +2,11 @@ import Link from "next/link";
 
 import { CreatePost } from "@/app/_components/create-post";
 import { api } from "@/trpc/server";
-import { unstable_noStore } from "next/cache";
+
+export const runtime = "edge";
+export const preferredRegion = "iad1";
 
 export default async function Home() {
-  unstable_noStore();
   const hello = await api.post.hello.query({ text: "from tRPC" });
 
   return (
@@ -51,14 +52,13 @@ export default async function Home() {
 }
 
 async function CrudShowcase() {
-  unstable_noStore();
   const start = Date.now();
   const latestPost = await api.post.getLatest.query();
   const duration = Date.now() - start;
 
   return (
     <div className="w-full max-w-xs">
-      <div>Vecel functions at (Node.js) (us-east-1 Virginia) </div>
+      <div>Vecel edge functions at (edge iad Washington, D.C., USA)</div>
       {latestPost ? (
         <p className="truncate">Your most recent post: {latestPost.name}</p>
       ) : (

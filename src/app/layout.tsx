@@ -5,9 +5,6 @@ import { Inter } from "next/font/google";
 
 import { TRPCReactProvider } from "@/trpc/react";
 
-export const runtime = "edge";
-export const preferredRegion = ["iad1"];
-
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
