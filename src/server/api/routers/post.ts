@@ -2,6 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 import { posts } from "@/server/db/schema";
+import { revalidateTag } from "next/cache";
 
 export const postRouter = createTRPCRouter({
   hello: publicProcedure
@@ -21,6 +22,7 @@ export const postRouter = createTRPCRouter({
       await ctx.db.insert(posts).values({
         name: input.name,
       });
+      revalidateTag("post.getLatest");
     }),
 
   getLatest: publicProcedure.query(({ ctx }) => {

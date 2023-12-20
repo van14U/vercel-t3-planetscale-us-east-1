@@ -50,7 +50,13 @@ export default async function Home() {
   );
 }
 
-const getLatestPost = () => api.post.getLatest.query();
+const getLatestPost = unstable_cache(
+  () => api.post.getLatest.query(),
+  undefined,
+  {
+    tags: ["post.getLatest"],
+  },
+);
 
 async function CrudShowcase() {
   unstable_noStore();
@@ -66,7 +72,7 @@ async function CrudShowcase() {
       ) : (
         <p>You have no posts yet.</p>
       )}
-      <div>No cache</div>
+      <div>unstable_cache</div>
       Drizzle + PlanetScale (us-east-1 Virginia) {duration}ms
       <CreatePost />
     </div>
