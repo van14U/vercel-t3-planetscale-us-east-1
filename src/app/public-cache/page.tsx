@@ -58,8 +58,29 @@ const getLatestPost = unstable_cache(
   },
 );
 
+const getCachedTimeInfinity = unstable_cache(
+  () => Promise.resolve(new Date()),
+  undefined,
+  {
+    tags: ["time"],
+  },
+);
+
+const getCachedTime2min = unstable_cache(
+  () => Promise.resolve(new Date()),
+  undefined,
+  {
+    tags: ["time-2min"],
+    revalidate: 120,
+  },
+);
+
 async function CrudShowcase() {
   unstable_noStore();
+  const [cachedInfTime, cached2minTime] = await Promise.all([
+    getCachedTimeInfinity(),
+    getCachedTime2min(),
+  ]);
   const start = Date.now();
   const latestPost = await getLatestPost();
   const duration = Date.now() - start;
@@ -67,6 +88,8 @@ async function CrudShowcase() {
   return (
     <div className="w-full max-w-xs">
       <div>Vecel functions at (Node.js) (us-east-1 Virginia) </div>
+      <p>Time inf: {cachedInfTime.toString()}</p>
+      <p>Time 2min: {cached2minTime.toString()}</p>
       {latestPost ? (
         <p className="truncate">Your most recent post: {latestPost.name}</p>
       ) : (
