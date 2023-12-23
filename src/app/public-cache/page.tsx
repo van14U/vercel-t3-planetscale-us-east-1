@@ -67,7 +67,11 @@ const getCachedTimeInfinity = unstable_cache(
 );
 
 const getCachedTime2min = unstable_cache(
-  () => Promise.resolve(new Date()),
+  async () => {
+    console.log("waiting 5s MISS");
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    return Promise.resolve(new Date());
+  },
   ["2min"],
   {
     tags: ["2min"],
